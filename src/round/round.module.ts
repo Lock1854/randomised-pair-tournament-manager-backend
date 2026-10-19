@@ -3,9 +3,10 @@ import { RoundService } from './round.service.js';
 import { RoundController } from './round.controller.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaireGeneree } from './entities/paire-generee.entity.js';
+import { TournoiModule } from '../tournoi/tournoi.module.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PaireGeneree])],
+  imports: [TypeOrmModule.forFeature([PaireGeneree]), TournoiModule],
   controllers: [RoundController],
   providers: [RoundService],
 })

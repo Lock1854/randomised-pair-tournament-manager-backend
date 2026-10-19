@@ -8,5 +8,6 @@ import { Tournoi } from './entities/tournoi.entity.js';
   imports: [TypeOrmModule.forFeature([Tournoi])],
   controllers: [TournoiController],
   providers: [TournoiService],
+  exports: [TournoiService],
 })
 export class TournoiModule {}
