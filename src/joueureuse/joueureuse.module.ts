@@ -8,5 +8,6 @@ import { Joueureuse } from './entities/joueureuse.entity.js';
   imports: [TypeOrmModule.forFeature([Joueureuse])],
   controllers: [JoueureuseController],
   providers: [JoueureuseService],
+  exports: [JoueureuseService],
 })
 export class JoueureuseModule {}

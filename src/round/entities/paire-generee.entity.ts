@@ -9,18 +9,24 @@ import { Tournoi } from '../../tournoi/entities/tournoi.entity.js';
 
 @Entity()
 export class PaireGeneree {
-  @PrimaryColumn("text")
-  @ManyToOne((type) => Joueureuse)
+  @PrimaryColumn('text')
+  tournoiId: string;
+
+  @PrimaryColumn('text')
+  joueureuseIdA: string;
+
+  @PrimaryColumn('text')
+  joueureuseIdB: string;
+
+  @ManyToOne(() => Joueureuse, { nullable: false })
   @JoinColumn({ name: 'joueureuseIdA' })
   joueureuseA: Joueureuse;
 
-  @PrimaryColumn("text")
-  @ManyToOne((type) => Joueureuse)
+  @ManyToOne(() => Joueureuse, { nullable: false })
   @JoinColumn({ name: 'joueureuseIdB' })
   joueureuseB: Joueureuse;
 
-  @PrimaryColumn("text")
-  @ManyToOne((type) => Tournoi)
+  @ManyToOne(() => Tournoi, { nullable: false })
   @JoinColumn({ name: 'tournoiId' })
   tournoi: Tournoi;
 }
