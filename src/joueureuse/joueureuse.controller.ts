@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  Query,
+  Put,
+} from '@nestjs/common';
 import { JoueureuseService } from './joueureuse.service.js';
 import { CreateJoueureuseDto } from './dto/create-joueureuse.dto.js';
 import { Joueureuse } from './entities/joueureuse.entity.js';
 import { DeleteResult } from 'typeorm';
+import { UpdateJoueureuseDto } from './dto/update-joueureuse.dto.js';
 
 enum ResultatMatch {
   GAGNE = "gagne",
@@ -53,12 +63,16 @@ export class JoueureuseController {
     }
   }
 
+  @Put()
+  async update(@Query('id') id: string, @Body() dto: UpdateJoueureuseDto) {
+    return this.joueureuseService.update(id, dto);
+  }
+
   @Delete()
-  async delete(@Query("id") id: string): Promise<DeleteResult> {
+  async delete(@Query('id') id: string): Promise<DeleteResult> {
     return this.joueureuseService.delete(id);
   }
 
   @Delete('reset')
-  async remove(){
-  }
+  async remove() {}
 }

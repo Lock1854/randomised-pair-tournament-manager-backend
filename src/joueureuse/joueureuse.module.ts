@@ -3,9 +3,10 @@ import { JoueureuseService } from './joueureuse.service.js';
 import { JoueureuseController } from './joueureuse.controller.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Joueureuse } from './entities/joueureuse.entity.js';
+import { TournoiModule } from '../tournoi/tournoi.module.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Joueureuse])],
+  imports: [TypeOrmModule.forFeature([Joueureuse]), TournoiModule],
   controllers: [JoueureuseController],
   providers: [JoueureuseService],
   exports: [JoueureuseService],

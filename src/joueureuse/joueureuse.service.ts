@@ -4,23 +4,36 @@ import { UpdateJoueureuseDto } from './dto/update-joueureuse.dto.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Joueureuse } from './entities/joueureuse.entity.js';
+import { TournoiService } from '../tournoi/tournoi.service.js';
 
 @Injectable()
 export class JoueureuseService {
   constructor(
     @InjectRepository(Joueureuse)
-    private readonly joueureuseRepository: Repository<Joueureuse>
+    private readonly joueureuseRepository: Repository<Joueureuse>,
+    private readonly tournoiService: TournoiService
   ) {
   }
 
   async create(dto: CreateJoueureuseDto): Promise<Joueureuse> {
-    console.debug(`dto: ${JSON.stringify(dto)}`);
+    const playersInTournament = await this.tournoiService.findPlayers(
+      dto.tournoiId,
+    );
+    const playerWhoPlayedLess =
+      playersInTournament
+        .filter((player) => player.actif)
+        .toSorted(
+          (player1, player2) =>
+            (player1.nbMatchsJoues + player1.retard) - (player2.nbMatchsJoues + player2.retard),
+        )[0];
+    const retard = playerWhoPlayedLess.nbMatchsJoues + playerWhoPlayedLess.retard
+
     const { tournoiId, ...restDto } = dto;
     const joueureuse = this.joueureuseRepository.create({
       ...restDto,
+      retard,
       tournoi: {tournoiId}
     });
-    console.debug(`created joueureuse: ${JSON.stringify(joueureuse)}`);
     return this.joueureuseRepository.save(joueureuse);
   }
 

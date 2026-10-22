@@ -28,4 +28,12 @@ export class CreateJoueureuseDto {
   @IsOptional()
   @IsInt()
   roundStreak?: number;
+
+  @IsOptional()
+  @IsInt()
+  retard?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  actif?: boolean;
 }

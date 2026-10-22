@@ -91,21 +91,27 @@ export class RoundService {
       return players;
     }
 
-    let minMatchesPlayed = players
-      .toSorted((player1, player2) => (player1.nbMatchsJoues ?? 0) - (player2.nbMatchsJoues ?? 0))
-      .at(0)?.nbMatchsJoues ?? 0;
+    const playerWhoPlayedLess = players
+      .toSorted((player1, player2) =>
+        (player1.nbMatchsJoues + player1.retard) - (player2.nbMatchsJoues + player2.retard))[0];
+    let minMatchesPlayed = playerWhoPlayedLess.nbMatchsJoues + playerWhoPlayedLess.retard
 
     let selectedPlayers = players
-      .filter((player) => player.nbMatchsJoues == minMatchesPlayed)
-      .filter((player) => (player.roundStreak ?? 0) < MAX_ROUND_STREAK_ALLOWED);
+      .filter((player) => player.actif)
+      .filter((player) => (player.nbMatchsJoues + player.retard) == minMatchesPlayed)
+      .filter((player) => player.roundStreak < MAX_ROUND_STREAK_ALLOWED);
 
     while (selectedPlayers.length < nbPlayers) {
       minMatchesPlayed++;
-      selectedPlayers = selectedPlayers
-        .concat(players
-          .filter((player) => player.nbMatchsJoues == minMatchesPlayed)
-          .filter((player) => (player.roundStreak ?? 0) < MAX_ROUND_STREAK_ALLOWED)
-        )
+      selectedPlayers = selectedPlayers.concat(
+        players
+          .filter((player) => player.actif)
+          .filter(
+            (player) =>
+              player.nbMatchsJoues + player.retard == minMatchesPlayed,
+          )
+          .filter((player) => player.roundStreak < MAX_ROUND_STREAK_ALLOWED),
+      );
     }
 
     let randomIndex = 0;
@@ -116,11 +122,11 @@ export class RoundService {
         maxRoundStreak =
           selectedPlayers.toSorted(
             (player1, player2) =>
-              (player2.roundStreak ?? 0) - (player1.roundStreak ?? 0),
-          )[0].roundStreak ?? 0;
+              player2.roundStreak - player1.roundStreak,
+          )[0].roundStreak;
         randomIndex = Math.floor(Math.random() * selectedPlayers.length);
         while (
-          (selectedPlayers[randomIndex].roundStreak ?? 0) < maxRoundStreak
+          selectedPlayers[randomIndex].roundStreak < maxRoundStreak
         ) {
           if (randomIndex == selectedPlayers.length - 1) randomIndex = 0;
           else randomIndex++;
@@ -133,8 +139,8 @@ export class RoundService {
 
     for (let player of selectedPlayers) {
       this.joueureuseService.update(player.joueureuseId, {
-        roundStreak: (player.roundStreak ?? 0) + 1,
-        nbMatchsJoues: (player.nbMatchsJoues ?? 0) + 1,
+        roundStreak: player.roundStreak + 1,
+        nbMatchsJoues: player.nbMatchsJoues + 1,
       });
     }
 

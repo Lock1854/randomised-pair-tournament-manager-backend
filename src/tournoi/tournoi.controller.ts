@@ -33,7 +33,7 @@ export class TournoiController {
 
   @Get("joueureuses")
   async findPlayers(tournoiId: string): Promise<Joueureuse[]> {
-    return (await this.tournoiService.findOne(tournoiId)).joueureuses;
+    return this.tournoiService.findPlayers(tournoiId);
   }
 
   @Patch('nb-terrains')

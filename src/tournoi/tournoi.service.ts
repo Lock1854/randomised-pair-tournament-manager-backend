@@ -4,6 +4,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { Tournoi } from './entities/tournoi.entity.js';
 import { CreateTournoiDto } from './dto/create-tournoi.dto.js';
 import { UpdateTournoiDto } from './dto/update-tournoi.dto.js';
+import { Joueureuse } from '../joueureuse/entities/joueureuse.entity.js';
 
 @Injectable()
 export class TournoiService {
@@ -26,6 +27,10 @@ export class TournoiService {
       throw new NotFoundException(`Tournoi ${id} introuvable`);
     }
     return tournoi;
+  }
+
+  async findPlayers(tournoiId: string): Promise<Joueureuse[]> {
+    return (await this.findOne(tournoiId)).joueureuses;
   }
 
   async findAll(): Promise<Tournoi[]> {

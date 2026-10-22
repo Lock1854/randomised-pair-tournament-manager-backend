@@ -18,21 +18,27 @@ export class Joueureuse {
   @Column()
   nom: string;
 
-  @ManyToOne((type) => Tournoi, (tournoi) => tournoi.joueureuses, {nullable: false})
+  @ManyToOne(() => Tournoi, (tournoi) => tournoi.joueureuses, {nullable: false})
   @JoinColumn({ name: 'tournoiId' })
   tournoi: typeorm.Relation<Tournoi>;
 
   @Column({ default: 0 })
-  nbMatchsJoues?: number;
+  nbMatchsJoues: number;
 
   @Column({ default: 0 })
-  nbVictoires?: number;
+  nbVictoires: number;
 
   @Column({ default: false })
-  aGagne?: boolean;
+  aGagne: boolean;
 
   @Column({ default: 0 })
-  roundStreak?: number;
+  roundStreak: number;
+
+  @Column({ default: 0 })
+  retard: number;
+
+  @Column({ default: true })
+  actif: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
