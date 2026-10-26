@@ -18,7 +18,7 @@ export class Joueureuse {
   @Column()
   nom: string;
 
-  @ManyToOne(() => Tournoi, (tournoi) => tournoi.joueureuses, {nullable: false})
+  @ManyToOne(() => Tournoi, (tournoi) => tournoi.joueureuses, {nullable: false, eager: true})
   @JoinColumn({ name: 'tournoiId' })
   tournoi: typeorm.Relation<Tournoi>;
 
